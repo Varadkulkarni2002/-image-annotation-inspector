@@ -144,8 +144,8 @@ Flat folder structures are also supported.
 ---
 
 ## License
+NO LICENSE
 
-MIT License
 
 ---
 
