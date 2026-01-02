@@ -1,60 +1,54 @@
-# AutoLabeler – Template Matching Annotation Tool
+# Universal Visual Inspector
 
-AutoLabeler is a **desktop GUI tool** for semi-automatic dataset annotation in Computer Vision projects.
-It propagates bounding box labels from a **single reference image** to a batch of similar images using **OpenCV template matching**.
+Universal Visual Inspector is a **desktop GUI tool** for visual inspection, review, and manual correction of image annotations used in Computer Vision datasets.
 
-The tool is designed for **controlled environments** where object scale, orientation, and appearance are relatively consistent.
-
----
-
-## Project Motivation
-
-Manual annotation is inefficient for datasets collected from:
-- Fixed cameras
-- Industrial inspection setups
-- Assembly lines
-- Screen captures or UI datasets
-
-In such cases, deep learning-based auto-labeling is often unnecessary.
-AutoLabeler provides a **lightweight, classical CV alternative** that is fast, explainable, and easy to debug.
+It is built for engineers who need to **validate dataset quality**, debug annotations, and visually inspect images before or after training — not for automatic labeling or model inference.
 
 ---
 
-## Key Capabilities
+## What This Tool Is
 
-- Label propagation using template matching
-- GUI-based workflow (no CLI arguments)
-- Supports common annotation formats
-- Preview detection before batch execution
-- Non-destructive processing
-- Threaded execution to keep UI responsive
+- A **visual inspection and annotation review tool**
+- A way to **open images + labels together**
+- A utility to **verify, inspect, and manually mark datasets**
+- A companion tool for auto-labelers and training pipelines
+
+---
+
+## What This Tool Is NOT
+
+- ❌ Not an auto-labeling tool  
+- ❌ Not a model training or inference system  
+- ❌ Not an AI-powered labeling platform  
+
+This tool focuses on **clarity, control, and correctness**.
+
+---
+
+## Key Features
+
+- Desktop GUI (Tkinter-based)
+- Supports YOLO, Pascal VOC (XML), and JSON annotations
+- Overlay bounding boxes on images
+- Manual navigation through datasets (Previous / Next / Go to index)
+- Zoom, pan, and fullscreen inspection
+- Manual drawing and erasing for visual markup
+- Batch folder inspection support
+- Non-destructive (original files are never modified)
 
 ---
 
 ## Supported Formats
 
-### Input
+### Image Formats
+- `.jpg`
+- `.jpeg`
+- `.png`
+
+### Annotation Formats
 - YOLO (`.txt`)
 - Pascal VOC (`.xml`)
-- JSON (LabelMe-style)
-
-### Output
-- YOLO
-- Pascal VOC (XML)
 - JSON
-
----
-
-## System Overview
-
-The application follows this pipeline:
-
-1. Parse reference annotation file
-2. Extract bounding box from reference image
-3. Crop template from reference image
-4. Apply `cv2.matchTemplate` on target images
-5. Filter detections using confidence threshold
-6. Serialize output annotations in selected format
 
 ---
 
@@ -64,21 +58,14 @@ The application follows this pipeline:
 - Python 3.7+
 - pip
 
-### Setup
-
-Clone the repository:
+### Python Dependencies
 ```bash
-git clone https://github.com/Varadkulkarni2002/Varadkulkarni2002-AutoLabeler-TemplateMatching.git
-cd Varadkulkarni2002-AutoLabeler-TemplateMatching
+pip install -r requirements.txt
 ```
 
-Install dependencies:
-```bash
-pip install opencv-python numpy Pillow
-```
-
-> Note: `tkinter` is bundled with most Python distributions.
-> On Linux:
+> **Note:**  
+> `tkinter` is included with most Python installations.  
+> On Linux systems:
 ```bash
 sudo apt install python3-tk
 ```
@@ -87,83 +74,78 @@ sudo apt install python3-tk
 
 ## Running the Application
 
+From the project root:
 ```bash
-python autolabeller.py
+python visual_inspection.py
 ```
 
-No command-line arguments are required.
+This launches the GUI window.
 
 ---
 
-## Usage Workflow
+## Usage
 
-### 1. Reference Selection
-- Select a **reference image** containing the object
-- Select its **annotation file**
-- (YOLO only) Provide `classes.txt`
+### Manual Inspection Mode
+1. Select an image file
+2. Select its corresponding annotation file
+3. (Optional) Select `classes.txt` for YOLO labels
+4. Click **Process Single Image**
 
-### 2. Target Dataset
-- Select the directory containing unlabeled images
-
-### 3. Output Configuration
-- Select output directory
-- Choose annotation format
-
-### 4. Execution
-- Adjust confidence threshold (recommended: `0.8`)
-- Use **Preview Sample** to verify detection
-- Start batch auto-labeling
+### Automated Folder Inspection Mode
+1. Select a root folder containing images and labels
+2. The tool pairs images with available annotations
+3. Navigate through the dataset using Next / Previous / Go
 
 ---
 
-## Output Structure
+## Recommended Dataset Structure
 
 ```
-output_directory/
+dataset/
 ├── images/
-│   ├── img_001.jpg
-│   └── img_002.jpg
+│   ├── image_001.jpg
+│   └── image_002.jpg
 └── labels/
-    ├── img_001.txt
-    └── img_002.txt
+    ├── image_001.txt
+    └── image_002.txt
 ```
 
-(Structure adapts automatically for XML / JSON outputs.)
+Flat folder structures are also supported.
+
+---
+
+## Controls
+
+- **Pan:** Left-click drag or middle mouse drag
+- **Zoom:** Ctrl + Mouse Wheel
+- **Draw Mode:** Left-click drag
+- **Erase Mode:** Drag over drawn elements
+- **Fullscreen:** F11
+- **Exit Fullscreen:** Esc
+
+---
+
+## Typical Use Cases
+
+- Dataset sanity checks before training
+- Reviewing auto-labeled datasets
+- Industrial vision inspection workflows
+- Debugging incorrect bounding boxes
+- Academic and research dataset validation
 
 ---
 
 ## Limitations
 
-This tool uses **template matching**, not learned representations.
-
-- Object scale must be similar to reference
-- Rotation invariance is limited
-- Sensitive to major lighting changes
-
-### Recommended Use Cases
-- Fixed-camera datasets
-- Industrial CV pipelines
-- Dataset bootstrapping
-- Rapid annotation for POCs
-
-Not recommended for:
-- In-the-wild datasets
-- Highly diverse object appearances
-
----
-
-## Future Improvements
-
-- Multi-scale template matching
-- Multiple reference templates per class
-- Manual review and correction interface
-- Match confidence visualization
+- Does not modify or rewrite annotation files
+- Manual drawing is for visual inspection only
+- Designed for single-user, local workflows
 
 ---
 
 ## License
 
-This project is licensed under the MIT License.
+MIT License
 
 ---
 
